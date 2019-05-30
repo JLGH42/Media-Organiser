@@ -1,11 +1,78 @@
-<div class="container row categories-filters-items">
-    <div class="card col-md-4" style="width: 18rem;">
-        <h3 class="categories-filters-header"> CATEGORY-FILTERS</h3>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item music-item"><a href="/">MUSIC</a></li>
-            <li class="list-group-item video-item"><a href="/">VIDEO</a></li>
-            <li class="list-group-item photo-item"><a href="/">PHOTO</a></li>
-        </ul>
-        <h5 class="categories-playlist">PLAYLIST</h5>
+<div class="card col-md-4" style="width: 18rem;">
+    <h3 class="categories-filters-header"> CATEGORY-FILTERS</h3>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item music-item"><a href="/">ALL</a></li>
+        <li class="list-group-item music-item"><a href="/">MUSIC</a></li>
+        <li class="list-group-item video-item"><a href="/">VIDEO</a></li>
+        <li class="list-group-item photo-item"><a href="/">PHOTO</a></li>
+    </ul>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewCategory">
+        NEW CATEGORY
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addNewCategory" tabindex="-1" role="dialog" aria-labelledby="addNewCategoryTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCategoryModalTitle">Add a New Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group category-name">
+                            <label for="category-name" class="col-form-label"><strong>Create a Name for your Category:</strong></label>
+                            <input type="text" class="form-control" id="category-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+{{!-- PLAYLIST --}}
+<dsiv class="card col-md-4" style="width: 18rem;">
+    <h3 class="categories-playlist-header"> PLAYLIST</h3>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item music-item"><a href="/"></a></li>
+        <li class="list-group-item video-item"><a href="/"></a></li>
+        <li class="list-group-item photo-item"><a href="/"></a></li>
+    </ul>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewPlaylist">
+        NEW PLAYLIST
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addNewPlaylist" tabindex="-1" role="dialog" aria-labelledby="addNewPlaylistTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newPlaylistModalTitle">Add a New Playlist</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group playlist-name">
+                            <label for="playlist-name" class="col-form-label"><strong>Create a Name for your Playlist:</strong></label>
+                            <input type="text" class="form-control" id="playlist-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

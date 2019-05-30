@@ -1,18 +1,55 @@
-<div class="container col files-container">
-    <div class="row files">
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
+<div class="col-md-4 files">
+    <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
     <div class="col categories-files-items">
-    <div class="card col-md-4" style="width: 18rem;">
-        <h3 class="categories-files-header">FILES</h3>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item music-item">1) Media ITEM</li>
-            <li class="list-group-item music-item">1) Media ITEM</li>
-            <li class="list-group-item music-item">1) Media ITEM</li>
-        </ul>
+        <div class="card col-md-4" style="width: 18rem;">
+            <h3 class="categories-files-header">FILES</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item media-item">1) Media ITEM</li>
+                <li class="list-group-item media-item">1) Media ITEM</li>
+                <li class="list-group-item media-item">1) Media ITEM</li>
+            </ul>
+        </div>
+    </div>
+    {{!-- Modal Button --}}
+    <h5 class="newMedia">MEDIA</h5>
+    <button type="button" class="btn btn-primary newMediaButton" data-toggle="modal" data-target="#addNewMedia">
+        NEW MEDIA
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addNewMedia" tabindex="-1" role="dialog" aria-labelledby="addNewMediaTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newMediaModalTitle">Add a New Media</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group media-name">
+                            <label for="Media-name" class="col-form-label"><strong>Create a Name for your Media:</strong></label>
+                            <input type="text" class="form-control" id="Media-name">
+                        </div>
+                        <div class="form-group media">
+                            <label for="message-text" class="col-form-label"></label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </div>
