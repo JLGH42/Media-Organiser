@@ -30,26 +30,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-group media-name">
-                            <label for="Media-name" class="col-form-label"><strong>Create a Name for your Media:</strong></label>
-                            <input type="text" class="form-control" id="Media-name">
+                    <form class="new-media-form" method="POST" action='/upload' enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="Media-name" class="col-form-label media-label"><strong>Create a Name for your Media:</strong></label>
+                            <input type="text" class="form-control" id="Media-name" name="mediaUploadComments">
                         </div>
                         <div class="form-group media">
                             <label for="message-text" class="col-form-label"></label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile01">
-                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                <input type="file" class="custom-file-input media-file-upload" id="inputGroupFile01" name="mediaFile">
+                                <label class="custom-file-label media-choose-file" for="inputGroupFile01">Choose file</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

@@ -10,6 +10,6 @@ exports.logUser = (req, res) => {
     res.render('layout.hbs');
 }
 
-module.exports = {
-    logUser
-}
+// module.exports = {
+//     logUser
+// }
