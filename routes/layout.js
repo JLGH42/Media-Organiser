@@ -4,51 +4,62 @@ const logger = require('../controller/logger.js');
 const multer = require('multer');
 const os = require('os');
 const fs = require('fs');
+const homeDir = os.userInfo().homedir;
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'views/public/uploads/')
+        //create the directory if it has not been created already.
+        // try {
+        //     stat = fs.statSync(newDestination);
+        // } catch (err) {
+        //     fs.mkdirSync(newDestination);
+        // }
+        cb(null, `${homeDir}\/uploads/images`)
     },
     filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now())
+        cb(null, file.originalname)
+    },
+})
+var upload = multer({
+    storage: storage,
+    //imageFilter
+    fileFilter: (req, file, cb) => {
+        if ((file.mimetype !== 'image/png') || (file.mimetype !== 'image/jpeg')) {
+            cb(null, true)
+        } else {
+            return cb(new Error('Incorrect file type, try with different file.'))
+        }
     }
 })
 
-var upload = multer({
-    storage: storage,
-})
-
+var filesContainer = [];
 router.get('/', (req, res) => {
-    const data = {
-        User: os.userInfo()
-    };
-    res.render('layout.hbs');
+    res.render('layout.hbs', {
+        file: filesContainer
+    });
 });
 
-router.post('/upload', (req, res) => {
+router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     const file = req.file;
-    console.log(file);
     const fileText = req.body.mediaUploadComments;
+    console.log(fileText);
 
-    var img = fs.readFileSync(`${file}`)
-    var encode_image = img.toString('base64');
-    var finalImg = {
-        contentType: req.file.mimetype,
-        image: new Buffer(encode_image, 'base64')
-    };
-    console.log(finalImg);
-
-    // var img = fs.readFileSync(`${file}`, (err, data) => {
-    //     if (err) throw err;
-    //     console.log(data);
-    //     console.log(img);
-    // });
-    // const input = document.querySelector('input.media-file-upload');
-    // input.on('submit', (e) => {
-    //     console.log(`${file} : ${fileText}`);
-    // })
-
-    res.redirect('/upload');
+    //single files | check if file obj is defined
+    if (!file) {
+        fs.readFile(`${file.originalname}`, 'utf-8', (err, data) => {
+            if (err) throw err;
+            console.log(data);
+        });
+        //push all media files to the container
+        if (typeof file.filesContainer != 'undefined') {
+            filesContainer.push({
+                files: req.file.mediaFile
+            })
+        }
+    }
+    res.redirect('/');
+    next();
 })
-router.get('/upload', (req, res) => res.send('successful upload'))
+router.get('/upload', (req, res) => res.send(`successfully uploaded file`))
+
 module.exports = router;

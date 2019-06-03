@@ -3,18 +3,7 @@
         <input class="form-control mr-sm-2" type="search" placeholder="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
-    <div class="col categories-files-items">
-        <div class="card col-md-4" style="width: 18rem;">
-            <h3 class="categories-files-header">FILES</h3>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item media-item">1) Media ITEM</li>
-                <li class="list-group-item media-item">1) Media ITEM</li>
-                <li class="list-group-item media-item">1) Media ITEM</li>
-            </ul>
-        </div>
-    </div>
     {{!-- Modal Button --}}
-    <h5 class="newMedia">MEDIA</h5>
     <button type="button" class="btn btn-primary newMediaButton" data-toggle="modal" data-target="#addNewMedia">
         NEW MEDIA
     </button>
@@ -49,6 +38,19 @@
                     <button type="submit" class="btn btn-primary" form="new-media-form" accept="image/*">Save changes</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col categories-files-items">
+        <div class="card col-md-4" style="width: 18rem;">
+            <h3 class="categories-files-header">FILES</h3>
+            {{#each files}}
+            <div id="newFile" class="d-inline-block text-black">
+                <div id="alertText" class="alert alert-dark" role="alert">
+                    {{ files }}
+                </div>
+            </div>
+            {{/each}}
+
         </div>
     </div>
 </div>
