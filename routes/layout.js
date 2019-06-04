@@ -35,7 +35,7 @@ var upload = multer({
 var filesContainer = [];
 router.get('/', (req, res) => {
     res.render('layout.hbs', {
-        file: filesContainer
+        files: filesContainer
     });
 });
 
@@ -50,12 +50,12 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
             if (err) throw err;
             console.log(data);
         });
-        //push all media files to the container
-        if (typeof file.filesContainer != 'undefined') {
-            filesContainer.push({
-                files: req.file.mediaFile
-            })
-        }
+    }
+    //push all media files to the container
+    if (typeof file != 'undefined') {
+        filesContainer.push({
+            files: req.file.originalname,
+        })
     }
     res.redirect('/');
     next();
