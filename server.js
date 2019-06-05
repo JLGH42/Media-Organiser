@@ -21,7 +21,7 @@ var urlencodedParser = bodyParser.urlencoded({
 });
 
 //test route
-var testRoute = require('./routes/layout.js');
-app.use('/', urlencodedParser, testRoute);
+var mediaFileRoute = require('./routes/mediaFiles.js');
+app.use('/', urlencodedParser, mediaFileRoute);
 
 app.listen(port, () => console.log(`Server Running on Port ${port}`));
