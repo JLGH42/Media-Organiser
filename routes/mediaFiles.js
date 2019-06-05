@@ -4,13 +4,25 @@ const multer = require('multer');
 const os = require('os');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+
+var catID;
+const mediaFileModel = require('../model/mediaFileModel.js');
 const homeDir = os.userInfo().homedir;
 const dir = `${homeDir.split('C:')[1]}\/uploads/images`;
 
 //create the directory if it has not been created already.
+var exists = (dir) => fs.access(dir, fs.constants.F_OK, (err) => {
+    console.log(`${dir} ${err ? 'does not exist' : 'exists'}`);
+});
 mkdirp(dir, function(err) {
     if (err) console.error(err)
-    else console.log('dir created')
+    else {
+        if (exists(dir) == 'exists') {
+            console.log('dir created' + ' ' + Date.now())
+        } else {
+            console.log('Directory has already been created')
+        }
+    }
 });
 
 var storage = multer.diskStorage({
@@ -41,12 +53,12 @@ router.get('/', (req, res) => {
     });
 });
 
+//single uploads
 router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     const file = req.file;
     const body = req.body;
     const fileName = file.originalname;
     const comments = body.mediaUploadComments;
-    const meta_data = "hello";
     console.log(fileName + '     :    ' + comments);
 
     //single files | check if file obj is defined
@@ -63,7 +75,11 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
         filesContainer.push({
             files: req.file.originalname,
         })
-        mediaFileModel.insertMedia(fileName, comments, meta_data)
+        if (!file.mimetype) {
+            file.mimetype.includes('image') ? catID = 4 : catID;
+            mediaFileModel.loadPhotoCat(catID);
+        }
+        mediaFileModel.insertMedia(fileName, comments, catID)
             //.then executes the await sequence through Promises
             .then(() => {
                 next();
@@ -75,6 +91,5 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     res.redirect('/');
     next();
 })
-router.get('/upload', (req, res) => res.send(`successfully uploaded file`))
 
 module.exports = router;
