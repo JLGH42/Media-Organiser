@@ -3,38 +3,28 @@ const router = express.Router();
 const multer = require('multer');
 const os = require('os');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
 
 var catID;
 const mediaFileModel = require('../model/mediaFileModel.js');
+const folderCreate = require('../middleware/asyncFolderCreate');
 const homeDir = os.userInfo().homedir;
-const dir = `${homeDir.split('C:')[1]}\/uploads/images`;
 
-//create the directory if it has not been created already.
-var exists = (dir) => fs.access(dir, fs.constants.F_OK, (err) => {
-    console.log(`${dir} ${err ? 'does not exist' : 'exists'}`);
-});
-mkdirp(dir, function(err) {
-    if (err) console.error(err)
-    else {
-        if (exists(dir) == 'exists') {
-            console.log('dir created' + ' ' + Date.now())
-        } else {
-            console.log('Directory has already been created')
-        }
-    }
-});
+var dir = `${homeDir.split('C:')[1]}\/uploads/`;
+//asynchronously creates uploads folder for saving files
+folderCreate.asyncFolderCreate(dir);
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, `${homeDir}\/uploads/images`)
+        cb(null, `${homeDir}\/uploads/`)
     },
+    preservePath: true,
     filename: function(req, file, cb) {
         cb(null, file.originalname)
     },
 })
 var upload = multer({
     storage: storage,
+
     //imageFilter
     // fileFilter: (req, file, cb) => {
     //     if ((file.mimetype == 'image/png') || (file.mimetype == 'image/jpeg')) {
@@ -47,7 +37,8 @@ var upload = multer({
 
 var filesContainer = [];
 router.get('/', (req, res) => {
-    //rendering files as a helper to be used in partial block
+    //rendering files as a helper to be used in partial block // logging user session setting errors to null 
+    // console.log(req.sessionID)
     res.render('layout.hbs', {
         files: filesContainer
     });
@@ -59,7 +50,7 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     const body = req.body;
     const fileName = file.originalname;
     const comments = body.mediaUploadComments;
-    console.log(fileName + '     :    ' + comments);
+    const filePath = req.file.path;
 
     //single files | check if file obj is defined
     if (!file) {
@@ -73,11 +64,12 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     //push all media files to the container
     if (typeof file != 'undefined') {
         filesContainer.push({
-            files: req.file.originalname,
-        })
-        if (!file.mimetype) {
+                files: req.file.originalname,
+            })
+            ///header on response
+        res.set('ImagePath', filePath);
+        if (file.mimetype) {
             file.mimetype.includes('image') ? catID = 4 : catID;
-            mediaFileModel.loadPhotoCat(catID);
         }
         mediaFileModel.insertMedia(fileName, comments, catID)
             //.then executes the await sequence through Promises
@@ -91,5 +83,8 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     res.redirect('/');
     next();
 })
+router.get('/', (req, res) => {
+    res.render('layout.hbs', {})
+})
 
-module.exports = router;
+module.exports = router

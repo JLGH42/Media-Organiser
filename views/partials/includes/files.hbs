@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="new-media-form" id="new-media-form" method="POST" action='upload/' enctype="multipart/form-data">
+                    <form class="new-media-form" id="new-media-form" name="new-media-form" method="POST" action='upload/' enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="Media-name" class="col-form-label media-label"><strong>Add a comment:</strong></label>
                             <input type="text" class="form-control" id="Media-name" name="mediaUploadComments">
@@ -35,7 +35,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="new-media-form" accept="image/*">Save changes</button>
+                    <button type="submit" class="btn btn-primary submit-file" form="new-media-form" accept="image/*">Save changes</button>
                 </div>
             </div>
         </div>
@@ -48,9 +48,9 @@
             <div id="newFile" class="d-inline-block text-black">
             {{#each files}}
                 <div id="alertText" class="alert alert-dark" role="alert">
-                    <a href="/">
-                    {{ files }}
-                    </a>
+                  <button type="button" class="btn btn-outline-primary fileSelect"> 
+                      {{ files }}
+                    </button>
                 </div>
             {{/each}}
             </div>
