@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const os = require('os');
 const fs = require('fs');
+const folderCreate = require('../middleware/asyncFolderCreate');
+const homeDir = os.userInfo().homedir;
+
+var dir = `${homeDir.split('C:')[1]}\/session/`;
 
 app.use((req, res, next) => {
     var seshData = [];
@@ -17,6 +21,7 @@ app.use((req, res, next) => {
             //obj to string
             var data = JSON.stringify(seshData[i]);
         }
+        folderCreate.asyncFolderCreate(dir);
     }
     fs.writeFile('session.json', data, (err) => {
         if (err) console.log(err);

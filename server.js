@@ -7,8 +7,8 @@ const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const path = require('path');
 //Built in
-const os = require('os');
-const fs = require('fs');
+const winston = require('os');
+const morgan = require('morgan');
 
 const sessions = require('./middleware/session.js');
 const partialsPath = path.join(__dirname + '/views/partials');
@@ -28,6 +28,8 @@ app.use(bodyParser.json()); // for parsing application/json
 var urlencodedParser = bodyParser.urlencoded({
     extended: true,
 });
+
+app.use(morgan('combined', { "stream": winston.stream }));
 
 hbs.registerHelper = ('imageClick', function() {
     var client = new XMLHttpRequest();
@@ -58,7 +60,6 @@ hbs.registerHelper = ('imageClick', function() {
 
 //test route
 var mediaFileRoute = require('./routes/mediaFiles.js');
-var userRoute = require('./routes/user.js');
 app.use('/', sessions)
 app.use('/', urlencodedParser, mediaFileRoute);
 // app.use('/', urlencodedParser, userRoute);
