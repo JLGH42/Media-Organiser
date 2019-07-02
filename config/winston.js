@@ -1,7 +1,8 @@
 const winston = require('winston');
 const path = require('path');
-var logRoot = path.join(__dirname + 'logs');
+var logRoot = path.join(__dirname + '/logs');
 
+//initialise transport options
 var options = {
     session: {
         level: 'info',
@@ -30,7 +31,7 @@ var options = {
 };
 
 // instantiate a new Winston Logger with the settings defined above
-var logger = new winston.Logger({
+var logger = module.exports = winston.createLogger({
     transports: [
         new winston.transports.File(options.session),
         new winston.transports.File(options.errors),

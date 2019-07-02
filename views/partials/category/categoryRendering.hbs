@@ -1,0 +1,10 @@
+<div class="card category-items" style="width: 18rem;">
+    <h3 class="categories-filters-header"> CATEGORY-FILTERS</h3>
+    {{#each categories}}
+    <div id="alertText" class="alert alert-dark" role="alert">
+        <button type="button" class="btn btn-outline-primary categorySelect">
+            {{ this.name }}
+        </button>
+    </div>
+    {{/each}}
+</div>

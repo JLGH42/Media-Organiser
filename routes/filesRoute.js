@@ -4,15 +4,14 @@ const multer = require('multer');
 const os = require('os');
 const fs = require('fs');
 
-var catID;
 const mediaFileModel = require('../model/mediaFileModel.js');
-const folderCreate = require('../middleware/asyncFolderCreate');
-const homeDir = os.userInfo().homedir;
+const functions = require('../middleware/session.js');
+const folderCreate = require('../middleware/asyncFolderCreate.js');
 
-var dir = `${homeDir.split('C:')[1]}\/uploads/`;
 //asynchronously creates uploads folder for saving files
+const homeDir = os.userInfo().homedir;
+var dir = `${homeDir.split('C:')[1]}\/uploads/`;
 folderCreate.asyncFolderCreate(dir);
-
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, `${homeDir}\/uploads/`)
@@ -24,23 +23,14 @@ var storage = multer.diskStorage({
 })
 var upload = multer({
     storage: storage,
-
-    //imageFilter
-    // fileFilter: (req, file, cb) => {
-    //     if ((file.mimetype == 'image/png') || (file.mimetype == 'image/jpeg')) {
-    //         cb(null, true)
-    //     } else {
-    //         return cb(new Error('Incorrect file type, try with different file.'))
-    //     }
-    // }
 })
 
 var filesContainer = [];
 router.get('/', (req, res) => {
-    //rendering files as a helper to be used in partial block // logging user session setting errors to null 
-    // console.log(req.sessionID)
+    //rendering files as a helper to be used in partial block 
     res.render('layout.hbs', {
-        files: filesContainer
+        filename: filesContainer,
+        path: filesContainer.path
     });
 });
 
@@ -48,10 +38,14 @@ router.get('/', (req, res) => {
 router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     const file = req.file;
     const body = req.body;
-    const fileName = file.originalname;
+    const title = file.originalname;
     const comments = body.mediaUploadComments;
     const filePath = req.file.path;
-
+    // initialise the locals settings object
+    req.settings = {
+        username: os.userInfo().username,
+        date: new Date().toISOString(),
+    };
     //single files | check if file obj is defined
     if (!file) {
         fs.readFile(`${file.originalname}`, 'utf-8', (err, data) => {
@@ -64,14 +58,19 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     //push all media files to the container
     if (typeof file != 'undefined') {
         filesContainer.push({
-                files: req.file.originalname,
+            filename: title,
+            path: filePath
+        })
+        var bufferPath = new Buffer(filePath, 'base64');
+        let ID = 4
+        mediaFileModel.getFileByID(ID)
+            .then(() => {
+                functions.saveSettings(JSON.stringify(req.settings))
+                console.log(req.settings)
+            }).catch((err) => {
+                console.log(err);
             })
-            ///header on response
-        res.set('ImagePath', filePath);
-        if (file.mimetype) {
-            file.mimetype.includes('image') ? catID = 4 : catID;
-        }
-        mediaFileModel.insertMedia(fileName, comments, catID)
+        mediaFileModel.insertMedia(title, comments, bufferPath, catID)
             //.then executes the await sequence through Promises
             .then(() => {
                 next();
@@ -83,7 +82,7 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     res.redirect('/');
     next();
 })
-router.get('/', (req, res) => {
+router.get('/upload', (req, res) => {
     res.render('layout.hbs', {})
 })
 

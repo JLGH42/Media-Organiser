@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {{> includes/myCSS}}
     {{> includes/bootstrapCSS}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LAYOUT</title>
 </head>
-<body>
-    <div class="container-fluid">
-    {{> includes/header}}
-    {{> includes/categoriesMenu}}
-    {{> includes/files}}
+<body style="background-color:orangered">
+    <div class="container-fluid" >
+        {{> includes/header}}
+        <div class="row mainColumns">
+            {{> category/categoriesMenu}} {{> files/filesMenu}}
+        </div>
     </div>
-    {{> includes/jquery}}
-    {{!-- {{> includes/openImage}} --}}
-    {{> includes/popperJS}}
-    {{> includes/bootstrapJS}}
-    
+    {{> includes/jquery}} {{> includes/popperJS}} {{> includes/bootstrapJS}}
 </body>
+
 </html>

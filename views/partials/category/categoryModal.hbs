@@ -1,0 +1,30 @@
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewCategory">
+    NEW CATEGORY
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addNewCategory" tabindex="-1" role="dialog" aria-labelledby="addNewCategoryTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newCategoryModalTitle">Add a New Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="new-category-form" id="category-form-id" name="new-category-form" method="POST" action='/' enctype="multipart/form-data">
+                    <div class="form-group category-name">
+                        <label for="category-name" class="col-form-label"><strong>Create a Name for your Category:</strong></label>
+                        <input type="text" class="form-control category-name-input" id="category-name" name="categoryUploadName">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary submit-form"  form="category-form-id">Save changes</button>
+            </div>
+        </div>
+    </div>
+ 
+</div>

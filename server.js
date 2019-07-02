@@ -6,17 +6,14 @@ const port = 1998;
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const path = require('path');
-//Built in
-const winston = require('os');
+const winston = require('winston');
 const morgan = require('morgan');
+//Built in
+const fs = require('fs');
 
-const sessions = require('./middleware/session.js');
 const partialsPath = path.join(__dirname + '/views/partials');
 const viewsPath = path.join(__dirname + '/views/templates');
 const publicPath = path.join(__dirname + '/views/public');
-
-// const uuid = require('uuid/v4');
-// const session = require('express-session');
 
 app.engine('hbs', require('hbs').__express);
 app.set('view engine', 'hbs');
@@ -30,39 +27,31 @@ var urlencodedParser = bodyParser.urlencoded({
 });
 
 app.use(morgan('combined', { "stream": winston.stream }));
+var logRoot = path.join(__dirname + '/logs');
+var accessLogStream = fs.createWriteStream(path.join(logRoot + '/sessions.log'), { flags: 'a' })
+    // setup the logger
+app.use(morgan('combined', { write: accessLogStream }))
 
-hbs.registerHelper = ('imageClick', function() {
-    var client = new XMLHttpRequest();
-    client.onreadystatechange = function() {
-        if (this.readyState == this.HEADERS_RECEIVED) {
-            var imagePath = client.getResponseHeader("ImagePath");
-            console.log(imagePath);
-            if (imagePath != my_expected_type) {
-                client.abort();
-            }
-        }
+hbs.registerHelper('extractValues', function getValues(context) {
+    let data = Object.values(context);
+    for (let i = 0; i < data.length; i++) {
+        const element = data[i];
+        return element;
     }
-    $("button.btn.fileSelect").click(function openImage(imagePath) {
-        (async() => {
-            await open(imagePath, {
-                wait: false
-            });
-            console.log('The image viewer app closed');
+});
 
-            // Specify the app to open in      
-            // await open('https://sindresorhus.com', {app: 'firefox'});
-            // Specify app arguments
-            // await open('https://sindresorhus.com', {app: ['google chrome', '--incognito']});
-        });
-    })
-
-})
+hbs.registerHelper('openFile', function openFile(filePath) {
+    (async() => {
+        await open(filePath, { wait: false });
+        console.log('The File viewer app closed');
+    })();
+});
 
 //test route
-var mediaFileRoute = require('./routes/mediaFiles.js');
-app.use('/', sessions)
-app.use('/', urlencodedParser, mediaFileRoute);
-// app.use('/', urlencodedParser, userRoute);
+var filesRoute = require('./routes/filesRoute.js');
+var categoriesRoute = require('./routes/categoriesRoute.js');
+app.use('/', urlencodedParser, filesRoute);
+app.use('/', urlencodedParser, categoriesRoute);
 
 
 app.listen(port, () => console.log(`Server Running on Port ${port}`));

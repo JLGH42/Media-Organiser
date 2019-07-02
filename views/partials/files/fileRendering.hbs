@@ -1,0 +1,17 @@
+<div class="card files-items" style="width: 18rem;">
+    <h3 class="files-header">FILES</h3>
+    <div id="newFile" class="d-inline-block text-black">
+        {{#if error}}
+        <div id="alertText" class="alert alert-dark" role="alert">
+            {{ this }}
+        </div>
+        {{else}} {{#each filename}}
+        <div id="alertText" class="alert alert-dark" role="alert">
+            <button onclick={{{openFile path}}} type="button" class="btn btn-outline-primary fileSelect">
+               {{@index}}: {{{ extractValues this }}}
+            </button>
+        </div>
+        {{/each}} {{/if}}
+    </div>
+
+</div>
