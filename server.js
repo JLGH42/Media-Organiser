@@ -15,7 +15,6 @@ const partialsPath = path.join(__dirname + '/views/partials');
 const viewsPath = path.join(__dirname + '/views/templates');
 const publicPath = path.join(__dirname + '/views/public');
 
-app.engine('hbs', require('hbs').__express);
 app.set('view engine', 'hbs');
 app.set('views', viewsPath);
 hbs.registerPartials(partialsPath);
@@ -27,7 +26,7 @@ var urlencodedParser = bodyParser.urlencoded({
 });
 
 app.use(morgan('combined', { "stream": winston.stream }));
-var logRoot = path.join(__dirname + '/logs');
+var logRoot = path.join(__dirname + '/config/logs');
 var accessLogStream = fs.createWriteStream(path.join(logRoot + '/sessions.log'), { flags: 'a' })
     // setup the logger
 app.use(morgan('combined', { write: accessLogStream }))

@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const multer = require('multer');
 const os = require('os');
 const fs = require('fs');
 
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
 const mediaFileModel = require('../model/mediaFileModel.js');
 const functions = require('../middleware/session.js');
 const folderCreate = require('../middleware/asyncFolderCreate.js');
@@ -29,7 +29,7 @@ var filesContainer = [];
 router.get('/', (req, res) => {
     //rendering files as a helper to be used in partial block 
     res.render('layout.hbs', {
-        filename: filesContainer,
+        filename: filesContainer.filename,
         path: filesContainer.path
     });
 });
@@ -45,6 +45,10 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
     req.settings = {
         username: os.userInfo().username,
         date: new Date().toISOString(),
+        title,
+        comments,
+        bufferPath,
+        catID = 4
     };
     //single files | check if file obj is defined
     if (!file) {
@@ -54,25 +58,16 @@ router.post('/upload', upload.single('mediaFile'), (req, res, next) => {
             };
             console.log(data);
         });
-    }
-    //push all media files to the container
-    if (typeof file != 'undefined') {
+        //push all media files to the container
         filesContainer.push({
             filename: title,
             path: filePath
         })
         var bufferPath = new Buffer(filePath, 'base64');
-        let ID = 4
-        mediaFileModel.getFileByID(ID)
-            .then(() => {
-                functions.saveSettings(JSON.stringify(req.settings))
-                console.log(req.settings)
-            }).catch((err) => {
-                console.log(err);
-            })
         mediaFileModel.insertMedia(title, comments, bufferPath, catID)
             //.then executes the await sequence through Promises
             .then(() => {
+                functions.saveSettings(JSON.stringify(req.settings))
                 next();
             }).catch((err) => {
                 console.log(err);
